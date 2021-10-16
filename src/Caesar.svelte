@@ -1,16 +1,51 @@
 <script lang="ts">
     import Pagina from "./Pagina.svelte";
+    import { caesarOntsleutel, caesarVersleutel } from "./algoritmes/caesar";
+    import type { Uitvoertype as Caesaruitvoer } from "./algoritmes/caesar";
+    import { slaap } from "./hulpfuncties";
 
     let tekst: string;
     let verschuiving: number;
+    let pijlPositie = 0;
+    let alfPositie = 0;
+    let uitvoertekst = "";
+    let pijlOmlaag = true;
 
     let alfabet: string[] = [];
     for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
+
+    async function go(versleutel: boolean) {
+        uitvoertekst = "";
+        pijlOmlaag = versleutel;
+
+        alfPositie = verschuiving % 26;
+        if (alfPositie < 0) alfPositie += 26;
+        await slaap(500);
+
+        let generator: Caesaruitvoer;
+        if (versleutel) generator = caesarVersleutel(tekst, verschuiving);
+        else generator = caesarOntsleutel(tekst, verschuiving);
+
+        while (true) {
+            let uitvoer = generator.next();
+            if (uitvoer.done || typeof uitvoer.value === "string") return;
+
+            if (uitvoer.value.actie === "pijl") {
+                pijlPositie = uitvoer.value.positie;
+                console.log(pijlPositie);
+                await slaap(500);
+            }
+            if (uitvoer.value.actie === "letter") {
+                uitvoertekst += uitvoer.value.letter;
+                await slaap(200);
+            }
+        }
+    }
 </script>
 
 <Pagina naam="Caesar">
     <div class="container">
-        <form>
+        <form on:submit|preventDefault>
             <label>Invoertekst: <input type="text" bind:value={tekst} /></label>
             <label>
                 Aantal letters verschuiven: <input
@@ -18,8 +53,8 @@
                     bind:value={verschuiving}
                 />
             </label>
-            <button>Versleutel</button>
-            <button>Ontsleutel</button>
+            <button on:click={() => go(true)}>Versleutel</button>
+            <button on:click={() => go(false)}>Ontsleutel</button>
         </form>
 
         <div class="visualisatie">
@@ -28,20 +63,24 @@
                     <span class="letter">{letter}</span>
                 {/each}
             </div>
-            <span class="pijl">&darr;</span>
-            <div class="alfabet versleuteld">
+            <span class="pijl" style="--pijl-positie: {pijlPositie};">
+                {@html pijlOmlaag ? "&darr;" : "&uarr;"}
+            </span>
+            <div
+                class="alfabet versleuteld"
+                style="--alf-positie: {alfPositie};"
+            >
                 {#each alfabet.concat(alfabet) as letter}
                     <span class="letter">{letter}</span>
                 {/each}
             </div>
         </div>
     </div>
-    <p class="uitvoer">Versleutelde tekst</p>
+    <p class="uitvoer">{uitvoertekst}</p>
 </Pagina>
 
 <style>
     .container {
-        --letterbreedte: 0.9em;
         display: flex;
         flex-direction: column;
         place-items: center;
@@ -53,13 +92,15 @@
         width: 7em;
     }
 
+    .visualisatie {
+        --letterbreedte: 0.9em;
+        font-size: small;
+    }
+
     .letter {
         display: inline-block;
         width: var(--letterbreedte);
         text-align: center;
-    }
-    .alfabet {
-        font-size: small;
     }
     .alfabet.versleuteld {
         width: calc(26 * var(--letterbreedte));
@@ -68,11 +109,22 @@
         white-space: nowrap;
     }
     .alfabet.versleuteld > .letter {
-        transform: translateX(calc(-5 * var(--letterbreedte)));
+        transform: translateX(
+            calc(-1 * var(--alf-positie) * var(--letterbreedte))
+        );
+        transition: ease 0.5s transform;
     }
 
     .visualisatie {
         text-align: left;
+    }
+
+    .pijl {
+        transform: translateX(calc(var(--letterbreedte) * var(--pijl-positie)));
+        transition: ease 0.5s transform;
+        display: inline-block;
+        text-align: center;
+        width: var(--letterbreedte);
     }
 
     .uitvoer {
@@ -88,7 +140,7 @@
             flex-direction: row;
         }
 
-        .alfabet {
+        .visualisatie {
             font-size: initial;
         }
     }
