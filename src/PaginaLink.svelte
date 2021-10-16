@@ -7,7 +7,7 @@
 
     function volgLink() {
         window.history.pushState(null, "", link);
-        $pad = link;
+        $pad = window.location.pathname;
     }
 </script>
 
