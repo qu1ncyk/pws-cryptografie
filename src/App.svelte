@@ -5,7 +5,7 @@
 	import Caesar from "./Caesar.svelte";
 
 	const paginas = {
-		caesar: Caesar,
+		"/caesar": Caesar,
 	};
 </script>
 
