@@ -5,3 +5,4 @@
 <h1>Cryptografie</h1>
 
 <PaginaLink titel="Caesar" foto="https://via.placeholder.com/100" link="caesar" />
+<PaginaLink titel="Vigenère" foto="https://via.placeholder.com/100" link="vigenere" />
