@@ -1,11 +1,18 @@
 <script lang="ts">
     import Pagina from "./Pagina.svelte";
+    import {
+        vigereneVersleutel,
+        vigereneOntsleutel,
+        Uitvoertype as Vigereneuitvoer,
+    } from "./algoritmes/vigerene";
+    import { slaap } from "./hulpfuncties";
 
     let tekst: string;
     let sleutel: string;
     let uitvoertekst = "";
-    let opgelichteRij = 2;
-    let opgelichteKolom = 4;
+    let opgelichteRij = -1;
+    let opgelichteKolom = -1;
+    let omgekeerdAlfabet = false;
 
     let alfabet: string[] = [];
     for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
@@ -16,13 +23,33 @@
             let tweedeHelft = alfabet.slice(vanafLetter);
             return tweedeHelft.concat(eersteHelft);
         } else {
-            let reeks = alfabetVanaf((vanafLetter + 1) % 26);
-            reeks.reverse();
-            return reeks;
+            return alfabetVanaf(26 - vanafLetter);
         }
     }
 
-    function go(a: boolean) {}
+    async function go(versleutel: boolean) {
+        uitvoertekst = "";
+        omgekeerdAlfabet = !versleutel;
+
+        let generator: Vigereneuitvoer;
+        if (versleutel) generator = vigereneVersleutel(tekst, sleutel);
+        else generator = vigereneOntsleutel(tekst, sleutel);
+
+        while (true) {
+            let uitvoer = generator.next();
+            if (uitvoer.done || typeof uitvoer.value === "string") return;
+
+            if (uitvoer.value.actie === "oplichting") {
+                opgelichteRij = uitvoer.value.rij;
+                opgelichteKolom = uitvoer.value.kolom;
+                await slaap(300);
+            }
+            if(uitvoer.value.actie === "letter") {
+                uitvoertekst += uitvoer.value.letter;
+                await slaap(500);
+            }
+        }
+    }
 </script>
 
 <Pagina naam="Vignenère">
@@ -54,7 +81,7 @@
                     <th class:opgelicht={opgelichteRij === rijnummer}>
                         {letterLinkerKolom}
                     </th>
-                    {#each alfabetVanaf(rijnummer, true) as letter, kolomnummer}
+                    {#each alfabetVanaf(rijnummer, omgekeerdAlfabet) as letter, kolomnummer}
                         <td
                             class:opgelicht={opgelichteRij === rijnummer ||
                                 opgelichteKolom === kolomnummer}
