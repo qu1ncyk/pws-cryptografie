@@ -3,9 +3,11 @@
 	import { pad } from "./stores";
 
 	import Caesar from "./Caesar.svelte";
+	import Vigenere from "./Vigenere.svelte";
 
 	const paginas = {
 		"/caesar": Caesar,
+		"/vigenere": Vigenere,
 	};
 </script>
 
