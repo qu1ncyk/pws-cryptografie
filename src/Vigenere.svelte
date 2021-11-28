@@ -13,6 +13,7 @@
     let opgelichteRij = -2;
     let opgelichteKolom = -2;
     let omgekeerdAlfabet = false;
+    let vergrendeld = false;
     let tekstInvoerElement: HTMLInputElement;
     let sleutelInvoerElement: HTMLInputElement;
 
@@ -42,6 +43,7 @@
 
         uitvoertekst = "";
         omgekeerdAlfabet = !versleutel;
+        vergrendeld = true;
 
         let generator: Vigereneuitvoer;
         if (versleutel) generator = vigereneVersleutel(tekst, sleutel);
@@ -49,7 +51,10 @@
 
         while (true) {
             let uitvoer = generator.next();
-            if (uitvoer.done || typeof uitvoer.value === "string") return;
+            if (uitvoer.done || typeof uitvoer.value === "string") {
+                vergrendeld = false;
+                return;
+            }
 
             if (uitvoer.value.actie === "oplichting") {
                 opgelichteRij = uitvoer.value.rij;
@@ -76,6 +81,7 @@
                     type="text"
                     bind:value={tekst}
                     bind:this={tekstInvoerElement}
+                    disabled={vergrendeld}
                 />
             </label>
             <label>
@@ -83,10 +89,15 @@
                     type="text"
                     bind:value={sleutel}
                     bind:this={sleutelInvoerElement}
+                    disabled={vergrendeld}
                 />
             </label>
-            <button on:click={() => go(true)}>Versleutel</button>
-            <button on:click={() => go(false)}>Ontsleutel</button>
+            <button on:click={() => go(true)} disabled={vergrendeld}>
+                Versleutel
+            </button>
+            <button on:click={() => go(false)} disabled={vergrendeld}>
+                Ontsleutel
+            </button>
         </form>
 
         <table

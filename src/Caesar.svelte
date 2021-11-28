@@ -12,6 +12,7 @@
     let alfPositie = 0;
     let uitvoertekst = "";
     let pijlOmlaag = true;
+    let vergrendeld = false;
     let tekstInvoerElement: HTMLInputElement;
     let verschuivingInvoerElement: HTMLInputElement;
 
@@ -33,9 +34,9 @@
             verschuivingInvoerElement.focus();
             return;
         }
-
         uitvoertekst = "";
         pijlOmlaag = versleutel;
+        vergrendeld = true;
 
         alfPositie = verschuiving % 26;
         if (alfPositie < 0) alfPositie += 26;
@@ -47,7 +48,10 @@
 
         while (true) {
             let uitvoer = generator.next();
-            if (uitvoer.done || typeof uitvoer.value === "string") return;
+            if (uitvoer.done || typeof uitvoer.value === "string") {
+                vergrendeld = false;
+                return;
+            }
 
             if (uitvoer.value.actie === "pijl") {
                 pijlPositie = uitvoer.value.positie;
@@ -69,22 +73,28 @@
 <Pagina naam="Caesar">
     <div class="container">
         <form on:submit|preventDefault>
-            <label
-                >Invoertekst: <input
+            <label>
+                Invoertekst: <input
                     type="text"
                     bind:value={tekst}
                     bind:this={tekstInvoerElement}
-                /></label
-            >
+                    disabled={vergrendeld}
+                />
+            </label>
             <label>
                 Aantal letters verschuiven: <input
                     type="number"
                     bind:value={verschuiving}
                     bind:this={verschuivingInvoerElement}
+                    disabled={vergrendeld}
                 />
             </label>
-            <button on:click={() => go(true)}>Versleutel</button>
-            <button on:click={() => go(false)}>Ontsleutel</button>
+            <button on:click={() => go(true)} disabled={vergrendeld}>
+                Versleutel
+            </button>
+            <button on:click={() => go(false)} disabled={vergrendeld}>
+                Ontsleutel
+            </button>
         </form>
 
         <div class="visualisatie">
