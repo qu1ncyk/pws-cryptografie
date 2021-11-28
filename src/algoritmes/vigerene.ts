@@ -16,8 +16,6 @@ export function* vigereneVersleutel(invoer: string, sleutel: string): Uitvoertyp
         else
             verschuiving = 0;
 
-        console.log({verschuiving});
-
         if (tekencode >= 65 && tekencode <= 90) { // hoofdletter
 
             yield { actie: "oplichting", rij: verschuiving, kolom: tekencode - 65 };
