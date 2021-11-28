@@ -52,7 +52,7 @@
     }
 </script>
 
-<Pagina naam="Vignenère">
+<Pagina naam="Vigenère">
     <div class="container">
         <form on:submit|preventDefault>
             <label>Invoertekst: <input type="text" bind:value={tekst} /></label>
