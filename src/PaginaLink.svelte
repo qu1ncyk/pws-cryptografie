@@ -24,6 +24,11 @@
         background-color: #ddd;
     }
 
+    img {
+        width: 100px;
+        height: 100px;
+    }
+
     p {
         margin: 0;
     }

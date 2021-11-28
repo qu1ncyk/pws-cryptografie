@@ -167,7 +167,7 @@
         height: 100%;
         top: 2em;
         right: 0;
-        transform: translateY(calc(var(--opgelichte-rij) * 1em));
+        transform: translateY(calc(var(--opgelichte-rij) * 100%));
     }
     .rij-boven::before {
         width: calc(100% / 27);
