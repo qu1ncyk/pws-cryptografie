@@ -4,7 +4,7 @@
     import type { Uitvoertype as Caesaruitvoer } from "./algoritmes/caesar";
     import { slaap } from "./hulpfuncties";
     import Fa from "svelte-fa";
-    import {faArrowUp, faArrowDown} from "@fortawesome/free-solid-svg-icons";
+    import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
     let tekst: string;
     let verschuiving: number;
@@ -12,11 +12,28 @@
     let alfPositie = 0;
     let uitvoertekst = "";
     let pijlOmlaag = true;
+    let tekstInvoerElement: HTMLInputElement;
+    let verschuivingInvoerElement: HTMLInputElement;
 
     let alfabet: string[] = [];
     for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
 
     async function go(versleutel: boolean) {
+        if (tekst === undefined || tekst === "") {
+            alert("Vergeet de invoertekst niet in te vullen");
+            tekstInvoerElement.focus();
+            return;
+        } else if (
+            verschuiving === undefined ||
+            verschuiving === null ||
+            verschuiving < 0 ||
+            verschuiving > 25
+        ) {
+            alert("De verschuiving moet tussen de 0 en 25 zitten");
+            verschuivingInvoerElement.focus();
+            return;
+        }
+
         uitvoertekst = "";
         pijlOmlaag = versleutel;
 
@@ -48,11 +65,18 @@
 <Pagina naam="Caesar">
     <div class="container">
         <form on:submit|preventDefault>
-            <label>Invoertekst: <input type="text" bind:value={tekst} /></label>
+            <label
+                >Invoertekst: <input
+                    type="text"
+                    bind:value={tekst}
+                    bind:this={tekstInvoerElement}
+                /></label
+            >
             <label>
                 Aantal letters verschuiven: <input
                     type="number"
                     bind:value={verschuiving}
+                    bind:this={verschuivingInvoerElement}
                 />
             </label>
             <button on:click={() => go(true)}>Versleutel</button>
