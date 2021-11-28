@@ -10,8 +10,8 @@
     let tekst: string;
     let sleutel: string;
     let uitvoertekst = "";
-    let opgelichteRij = -1;
-    let opgelichteKolom = -1;
+    let opgelichteRij = -2;
+    let opgelichteKolom = -2;
     let omgekeerdAlfabet = false;
     let tekstInvoerElement: HTMLInputElement;
     let sleutelInvoerElement: HTMLInputElement;
@@ -31,11 +31,11 @@
 
     async function go(versleutel: boolean) {
         if (tekst === "" || tekst === undefined) {
-            alert("Vergeet de invoertekst niet in te vullen")
+            alert("Vergeet de invoertekst niet in te vullen");
             tekstInvoerElement.focus();
             return;
         } else if (sleutel === "" || sleutel === undefined) {
-            alert("Vergeet de sleutel niet in te vullen")
+            alert("Vergeet de sleutel niet in te vullen");
             sleutelInvoerElement.focus();
             return;
         }
@@ -54,11 +54,11 @@
             if (uitvoer.value.actie === "oplichting") {
                 opgelichteRij = uitvoer.value.rij;
                 opgelichteKolom = uitvoer.value.kolom;
-                await slaap(300);
+                await slaap(600);
             }
             if (uitvoer.value.actie === "letter") {
                 uitvoertekst += uitvoer.value.letter;
-                await slaap(500);
+                await slaap(200);
             }
         }
     }
@@ -71,13 +71,13 @@
 <Pagina naam="Vigenère">
     <div class="container">
         <form on:submit|preventDefault>
-            <label
-                >Invoertekst: <input
+            <label>
+                Invoertekst: <input
                     type="text"
                     bind:value={tekst}
                     bind:this={tekstInvoerElement}
-                /></label
-            >
+                />
+            </label>
             <label>
                 Sleutel: <input
                     type="text"
@@ -89,31 +89,31 @@
             <button on:click={() => go(false)}>Ontsleutel</button>
         </form>
 
-        <table>
+        <table
+            style="--opgelichte-rij: {opgelichteRij};
+                --opgelichte-kolom: {opgelichteKolom};"
+        >
             <tr>
-                <td rowspan="28"><span class="sleutel">Sleutel</span></td>
-                <td colspan="28">Tekst</td>
+                <td rowspan="28" class="kolom-links">
+                    <span class="sleutel">Sleutel</span>
+                </td>
+                <td colspan="28" class="rij-boven">Tekst</td>
             </tr>
             <tr>
                 <th />
-                {#each alfabet as letterBovensteRij, kolomnummer}
-                    <th class:opgelicht={opgelichteKolom === kolomnummer}>
+                {#each alfabet as letterBovensteRij}
+                    <th>
                         {letterBovensteRij}
                     </th>
                 {/each}
             </tr>
             {#each alfabet as letterLinkerKolom, rijnummer}
                 <tr>
-                    <th class:opgelicht={opgelichteRij === rijnummer}>
+                    <th>
                         {letterLinkerKolom}
                     </th>
-                    {#each alfabetVanaf(rijnummer, omgekeerdAlfabet) as letter, kolomnummer}
-                        <td
-                            class:opgelicht={opgelichteRij === rijnummer ||
-                                opgelichteKolom === kolomnummer}
-                            class:extra-opgelicht={opgelichteRij ===
-                                rijnummer && opgelichteKolom === kolomnummer}
-                        >
+                    {#each alfabetVanaf(rijnummer, omgekeerdAlfabet) as letter}
+                        <td>
                             {letter}
                         </td>
                     {/each}
@@ -135,6 +135,36 @@
 
     table {
         border-collapse: collapse;
+        display: inline-block;
+        position: relative;
+    }
+
+    .rij-boven,
+    .kolom-links {
+        position: relative;
+    }
+    .rij-boven::after,
+    .kolom-links::after {
+        content: "";
+        background-color: rgba(255, 255, 50, 0.5);
+        position: absolute;
+        display: inline-block;
+        z-index: -1;
+        transition: ease 0.5s transform;
+    }
+    .rij-boven::after {
+        width: 100%;
+        height: 1em;
+        top: 2em;
+        right: 0;
+        transform: translateY(calc(var(--opgelichte-rij) * 1em));
+    }
+    .kolom-links::after {
+        width: 100%;
+        height: calc(100% - 1em);
+        bottom: 0;
+        left: 200%;
+        transform: translateX(calc(var(--opgelichte-kolom) * 100%));
     }
 
     th,
@@ -142,14 +172,6 @@
         padding: 0;
         font-size: 0.8em;
         line-height: 1em;
-    }
-
-    .opgelicht {
-        background-color: rgb(255, 255, 133);
-    }
-
-    .extra-opgelicht {
-        border: 1px solid black;
     }
 
     .sleutel {
