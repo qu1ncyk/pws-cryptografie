@@ -6,9 +6,8 @@
     import { pad } from "./stores";
 
     function volgLink() {
-        window.history.pushState(null, "", link);
+        window.history.pushState(true, "", link);
         $pad = window.location.pathname;
-        localStorage.vanafHoofdmenu = true;
     }
 </script>
 

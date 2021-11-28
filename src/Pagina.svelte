@@ -6,7 +6,7 @@
     export let naam: string;
 
     function terug() {
-        if (localStorage.vanafHoofdmenu) 
+        if (window.history.state) 
             window.history.back();
          else 
             window.history.pushState(null, "", "/");
