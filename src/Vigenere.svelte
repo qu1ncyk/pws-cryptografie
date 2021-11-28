@@ -13,6 +13,8 @@
     let opgelichteRij = -1;
     let opgelichteKolom = -1;
     let omgekeerdAlfabet = false;
+    let tekstInvoerElement: HTMLInputElement;
+    let sleutelInvoerElement: HTMLInputElement;
 
     let alfabet: string[] = [];
     for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
@@ -28,6 +30,16 @@
     }
 
     async function go(versleutel: boolean) {
+        if (tekst === "" || tekst === undefined) {
+            alert("Vergeet de invoertekst niet in te vullen")
+            tekstInvoerElement.focus();
+            return;
+        } else if (sleutel === "" || sleutel === undefined) {
+            alert("Vergeet de sleutel niet in te vullen")
+            sleutelInvoerElement.focus();
+            return;
+        }
+
         uitvoertekst = "";
         omgekeerdAlfabet = !versleutel;
 
@@ -44,7 +56,7 @@
                 opgelichteKolom = uitvoer.value.kolom;
                 await slaap(300);
             }
-            if(uitvoer.value.actie === "letter") {
+            if (uitvoer.value.actie === "letter") {
                 uitvoertekst += uitvoer.value.letter;
                 await slaap(500);
             }
@@ -55,9 +67,19 @@
 <Pagina naam="Vigenère">
     <div class="container">
         <form on:submit|preventDefault>
-            <label>Invoertekst: <input type="text" bind:value={tekst} /></label>
+            <label
+                >Invoertekst: <input
+                    type="text"
+                    bind:value={tekst}
+                    bind:this={tekstInvoerElement}
+                /></label
+            >
             <label>
-                Sleutel: <input type="text" bind:value={sleutel} />
+                Sleutel: <input
+                    type="text"
+                    bind:value={sleutel}
+                    bind:this={sleutelInvoerElement}
+                />
             </label>
             <button on:click={() => go(true)}>Versleutel</button>
             <button on:click={() => go(false)}>Ontsleutel</button>
