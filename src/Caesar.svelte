@@ -3,6 +3,8 @@
     import { caesarOntsleutel, caesarVersleutel } from "./algoritmes/caesar";
     import type { Uitvoertype as Caesaruitvoer } from "./algoritmes/caesar";
     import { slaap } from "./hulpfuncties";
+    import Fa from "svelte-fa";
+    import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
     let tekst: string;
     let verschuiving: number;
@@ -10,13 +12,31 @@
     let alfPositie = 0;
     let uitvoertekst = "";
     let pijlOmlaag = true;
+    let vergrendeld = false;
+    let tekstInvoerElement: HTMLInputElement;
+    let verschuivingInvoerElement: HTMLInputElement;
 
     let alfabet: string[] = [];
     for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
 
     async function go(versleutel: boolean) {
+        if (tekst === undefined || tekst === "") {
+            alert("Vergeet de invoertekst niet in te vullen");
+            tekstInvoerElement.focus();
+            return;
+        } else if (
+            verschuiving === undefined ||
+            verschuiving === null ||
+            verschuiving < 0 ||
+            verschuiving > 25
+        ) {
+            alert("De verschuiving moet tussen de 0 en 25 zitten");
+            verschuivingInvoerElement.focus();
+            return;
+        }
         uitvoertekst = "";
         pijlOmlaag = versleutel;
+        vergrendeld = true;
 
         alfPositie = verschuiving % 26;
         if (alfPositie < 0) alfPositie += 26;
@@ -28,7 +48,10 @@
 
         while (true) {
             let uitvoer = generator.next();
-            if (uitvoer.done || typeof uitvoer.value === "string") return;
+            if (uitvoer.done || typeof uitvoer.value === "string") {
+                vergrendeld = false;
+                return;
+            }
 
             if (uitvoer.value.actie === "pijl") {
                 pijlPositie = uitvoer.value.positie;
@@ -43,18 +66,35 @@
     }
 </script>
 
+<svelte:head>
+    <title>Caesar - PWS Cryptografie</title>
+</svelte:head>
+
 <Pagina naam="Caesar">
     <div class="container">
         <form on:submit|preventDefault>
-            <label>Invoertekst: <input type="text" bind:value={tekst} /></label>
+            <label>
+                Invoertekst: <input
+                    type="text"
+                    bind:value={tekst}
+                    bind:this={tekstInvoerElement}
+                    disabled={vergrendeld}
+                />
+            </label>
             <label>
                 Aantal letters verschuiven: <input
                     type="number"
                     bind:value={verschuiving}
+                    bind:this={verschuivingInvoerElement}
+                    disabled={vergrendeld}
                 />
             </label>
-            <button on:click={() => go(true)}>Versleutel</button>
-            <button on:click={() => go(false)}>Ontsleutel</button>
+            <button on:click={() => go(true)} disabled={vergrendeld}>
+                Versleutel
+            </button>
+            <button on:click={() => go(false)} disabled={vergrendeld}>
+                Ontsleutel
+            </button>
         </form>
 
         <div class="visualisatie">
@@ -64,7 +104,7 @@
                 {/each}
             </div>
             <span class="pijl" style="--pijl-positie: {pijlPositie};">
-                {@html pijlOmlaag ? "&darr;" : "&uarr;"}
+                <Fa icon={pijlOmlaag ? faArrowDown : faArrowUp} />
             </span>
             <div
                 class="alfabet versleuteld"

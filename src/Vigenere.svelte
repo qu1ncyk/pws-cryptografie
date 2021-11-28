@@ -10,9 +10,12 @@
     let tekst: string;
     let sleutel: string;
     let uitvoertekst = "";
-    let opgelichteRij = -1;
-    let opgelichteKolom = -1;
+    let opgelichteRij = -2;
+    let opgelichteKolom = -2;
     let omgekeerdAlfabet = false;
+    let vergrendeld = false;
+    let tekstInvoerElement: HTMLInputElement;
+    let sleutelInvoerElement: HTMLInputElement;
 
     let alfabet: string[] = [];
     for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
@@ -28,8 +31,19 @@
     }
 
     async function go(versleutel: boolean) {
+        if (tekst === "" || tekst === undefined) {
+            alert("Vergeet de invoertekst niet in te vullen");
+            tekstInvoerElement.focus();
+            return;
+        } else if (sleutel === "" || sleutel === undefined) {
+            alert("Vergeet de sleutel niet in te vullen");
+            sleutelInvoerElement.focus();
+            return;
+        }
+
         uitvoertekst = "";
         omgekeerdAlfabet = !versleutel;
+        vergrendeld = true;
 
         let generator: Vigereneuitvoer;
         if (versleutel) generator = vigereneVersleutel(tekst, sleutel);
@@ -37,57 +51,80 @@
 
         while (true) {
             let uitvoer = generator.next();
-            if (uitvoer.done || typeof uitvoer.value === "string") return;
+            if (uitvoer.done || typeof uitvoer.value === "string") {
+                vergrendeld = false;
+                return;
+            }
 
             if (uitvoer.value.actie === "oplichting") {
                 opgelichteRij = uitvoer.value.rij;
                 opgelichteKolom = uitvoer.value.kolom;
-                await slaap(300);
+                await slaap(600);
             }
-            if(uitvoer.value.actie === "letter") {
+            if (uitvoer.value.actie === "letter") {
                 uitvoertekst += uitvoer.value.letter;
-                await slaap(500);
+                await slaap(200);
             }
         }
     }
 </script>
 
-<Pagina naam="Vignenère">
+<svelte:head>
+    <title>Vigenère - PWS Cryptografie</title>
+</svelte:head>
+
+<Pagina naam="Vigenère">
     <div class="container">
         <form on:submit|preventDefault>
-            <label>Invoertekst: <input type="text" bind:value={tekst} /></label>
             <label>
-                Sleutel: <input type="text" bind:value={sleutel} />
+                Invoertekst: <input
+                    type="text"
+                    bind:value={tekst}
+                    bind:this={tekstInvoerElement}
+                    disabled={vergrendeld}
+                />
             </label>
-            <button on:click={() => go(true)}>Versleutel</button>
-            <button on:click={() => go(false)}>Ontsleutel</button>
+            <label>
+                Sleutel: <input
+                    type="text"
+                    bind:value={sleutel}
+                    bind:this={sleutelInvoerElement}
+                    disabled={vergrendeld}
+                />
+            </label>
+            <button on:click={() => go(true)} disabled={vergrendeld}>
+                Versleutel
+            </button>
+            <button on:click={() => go(false)} disabled={vergrendeld}>
+                Ontsleutel
+            </button>
         </form>
 
-        <table>
+        <table
+            style="--opgelichte-rij: {opgelichteRij};
+                --opgelichte-kolom: {opgelichteKolom};"
+        >
             <tr>
-                <td rowspan="28"><span class="sleutel">Sleutel</span></td>
-                <td colspan="28">Tekst</td>
+                <td rowspan="28">
+                    <span class="sleutel">Sleutel</span>
+                </td>
+                <td colspan="28" class="rij-boven">Tekst</td>
             </tr>
             <tr>
                 <th />
-                {#each alfabet as letterBovensteRij, kolomnummer}
-                    <th class:opgelicht={opgelichteKolom === kolomnummer}>
+                {#each alfabet as letterBovensteRij}
+                    <th>
                         {letterBovensteRij}
                     </th>
                 {/each}
             </tr>
             {#each alfabet as letterLinkerKolom, rijnummer}
                 <tr>
-                    <th class:opgelicht={opgelichteRij === rijnummer}>
+                    <th>
                         {letterLinkerKolom}
                     </th>
-                    {#each alfabetVanaf(rijnummer, omgekeerdAlfabet) as letter, kolomnummer}
-                        <td
-                            class:opgelicht={opgelichteRij === rijnummer ||
-                                opgelichteKolom === kolomnummer}
-                            class:extra-opgelicht={opgelichteRij ===
-                                rijnummer && opgelichteKolom === kolomnummer}
-                        >
+                    {#each alfabetVanaf(rijnummer, omgekeerdAlfabet) as letter}
+                        <td>
                             {letter}
                         </td>
                     {/each}
@@ -109,6 +146,35 @@
 
     table {
         border-collapse: collapse;
+        display: inline-block;
+        position: relative;
+    }
+
+    .rij-boven {
+        position: relative;
+    }
+    .rij-boven::after,
+    .rij-boven::before {
+        content: "";
+        background-color: rgba(255, 255, 50, 0.5);
+        position: absolute;
+        display: inline-block;
+        z-index: -1;
+        transition: ease 0.5s transform;
+    }
+    .rij-boven::after {
+        width: 100%;
+        height: 100%;
+        top: 2em;
+        right: 0;
+        transform: translateY(calc(var(--opgelichte-rij) * 100%));
+    }
+    .rij-boven::before {
+        width: calc(100% / 27);
+        height: calc(100% * 27);
+        top: 100%;
+        left: calc(100% / 27);
+        transform: translateX(calc(var(--opgelichte-kolom) * 100%));
     }
 
     th,
@@ -116,14 +182,6 @@
         padding: 0;
         font-size: 0.8em;
         line-height: 1em;
-    }
-
-    .opgelicht {
-        background-color: rgb(255, 255, 133);
-    }
-
-    .extra-opgelicht {
-        border: 1px solid black;
     }
 
     .sleutel {
