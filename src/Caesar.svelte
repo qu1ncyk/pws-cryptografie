@@ -3,6 +3,8 @@
     import { caesarOntsleutel, caesarVersleutel } from "./algoritmes/caesar";
     import type { Uitvoertype as Caesaruitvoer } from "./algoritmes/caesar";
     import { slaap } from "./hulpfuncties";
+    import Fa from "svelte-fa";
+    import {faArrowUp, faArrowDown} from "@fortawesome/free-solid-svg-icons";
 
     let tekst: string;
     let verschuiving: number;
@@ -64,7 +66,7 @@
                 {/each}
             </div>
             <span class="pijl" style="--pijl-positie: {pijlPositie};">
-                {@html pijlOmlaag ? "&darr;" : "&uarr;"}
+                <Fa icon={pijlOmlaag ? faArrowDown : faArrowUp} />
             </span>
             <div
                 class="alfabet versleuteld"
