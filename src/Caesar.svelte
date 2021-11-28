@@ -62,6 +62,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>Caesar - PWS Cryptografie</title>
+</svelte:head>
+
 <Pagina naam="Caesar">
     <div class="container">
         <form on:submit|preventDefault>

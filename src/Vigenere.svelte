@@ -64,6 +64,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>Vigenère - PWS Cryptografie</title>
+</svelte:head>
+
 <Pagina naam="Vigenère">
     <div class="container">
         <form on:submit|preventDefault>
