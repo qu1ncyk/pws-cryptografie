@@ -105,7 +105,7 @@
                 --opgelichte-kolom: {opgelichteKolom};"
         >
             <tr>
-                <td rowspan="28" class="kolom-links">
+                <td rowspan="28">
                     <span class="sleutel">Sleutel</span>
                 </td>
                 <td colspan="28" class="rij-boven">Tekst</td>
@@ -150,12 +150,11 @@
         position: relative;
     }
 
-    .rij-boven,
-    .kolom-links {
+    .rij-boven {
         position: relative;
     }
     .rij-boven::after,
-    .kolom-links::after {
+    .rij-boven::before {
         content: "";
         background-color: rgba(255, 255, 50, 0.5);
         position: absolute;
@@ -165,16 +164,16 @@
     }
     .rij-boven::after {
         width: 100%;
-        height: 1em;
+        height: 100%;
         top: 2em;
         right: 0;
         transform: translateY(calc(var(--opgelichte-rij) * 1em));
     }
-    .kolom-links::after {
-        width: 100%;
-        height: calc(100% - 1em);
-        bottom: 0;
-        left: 200%;
+    .rij-boven::before {
+        width: calc(100% / 27);
+        height: calc(100% * 27);
+        top: 100%;
+        left: calc(100% / 27);
         transform: translateX(calc(var(--opgelichte-kolom) * 100%));
     }
 
