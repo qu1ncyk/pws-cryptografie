@@ -1,5 +1,7 @@
 <script lang="ts">
     import PaginaLink from "./PaginaLink.svelte";
+
+    localStorage.vanafHoofdmenu = false;
 </script>
 
 <svelte:head>

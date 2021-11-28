@@ -8,6 +8,7 @@
     function volgLink() {
         window.history.pushState(null, "", link);
         $pad = window.location.pathname;
+        localStorage.vanafHoofdmenu = true;
     }
 </script>
 
