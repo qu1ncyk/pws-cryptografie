@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Pagina from "./Pagina.svelte";
-    import { caesarOntsleutel, caesarVersleutel } from "./algoritmes/caesar";
-    import type { Uitvoertype as Caesaruitvoer } from "./algoritmes/caesar";
-    import { slaap } from "./hulpfuncties";
+    import Pagina from "../Pagina.svelte";
+    import { caesarOntsleutel, caesarVersleutel } from "../algoritmes/caesar";
+    import type { Uitvoertype as Caesaruitvoer } from "../algoritmes/caesar";
+    import { slaap, alfabet } from "../hulpfuncties";
     import Fa from "svelte-fa";
     import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
@@ -15,9 +15,6 @@
     let vergrendeld = false;
     let tekstInvoerElement: HTMLInputElement;
     let verschuivingInvoerElement: HTMLInputElement;
-
-    let alfabet: string[] = [];
-    for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
 
     async function go(versleutel: boolean) {
         if (tekst === undefined || tekst === "") {

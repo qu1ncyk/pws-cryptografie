@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Pagina from "./Pagina.svelte";
+    import Pagina from "../Pagina.svelte";
     import {
         vigereneVersleutel,
         vigereneOntsleutel,
         Uitvoertype as Vigereneuitvoer,
-    } from "./algoritmes/vigerene";
-    import { slaap } from "./hulpfuncties";
+    } from "../algoritmes/vigerene";
+    import { slaap, alfabet } from "../hulpfuncties";
 
     let tekst: string;
     let sleutel: string;
@@ -16,9 +16,6 @@
     let vergrendeld = false;
     let tekstInvoerElement: HTMLInputElement;
     let sleutelInvoerElement: HTMLInputElement;
-
-    let alfabet: string[] = [];
-    for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
 
     function alfabetVanaf(vanafLetter: number, omgekeerd = false) {
         if (!omgekeerd) {
