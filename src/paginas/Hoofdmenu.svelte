@@ -10,3 +10,4 @@
 
 <PaginaLink titel="Caesar" foto="/caesar.png" link="caesar" />
 <PaginaLink titel="Vigenère" foto="/vigenere.png" link="vigenere" />
+<PaginaLink titel="Diffie-Hellman" link="diffie-hellman" />

@@ -1,7 +1,7 @@
 <script lang="ts">
     export let titel: string;
     export let link: string;
-    export let foto: string;
+    export let foto = "https://via.placeholder.com/100";
 
     import { pad } from "./stores";
 

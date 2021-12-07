@@ -4,10 +4,12 @@
 
 	import Caesar from "./paginas/Caesar.svelte";
 	import Vigenere from "./paginas/Vigenere.svelte";
+	import DiffieHellman from "./paginas/DiffieHellman.svelte";
 
 	const paginas = {
 		"/caesar": Caesar,
 		"/vigenere": Vigenere,
+		"/diffie-hellman": DiffieHellman,
 	};
 </script>
 
