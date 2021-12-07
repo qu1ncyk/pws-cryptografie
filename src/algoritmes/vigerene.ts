@@ -1,3 +1,5 @@
+import { Letter, letterSoort, naarPlaatsInAlfabet, verschuifLetter } from "../hulpfuncties";
+
 export type Uitvoertype = Generator<
     { actie: "oplichting", rij: number, kolom: number } | { actie: "letter", letter: string },
     string>;
@@ -5,35 +7,20 @@ export type Uitvoertype = Generator<
 export function* vigereneVersleutel(invoer: string, sleutel: string): Uitvoertype {
     let uitvoer = "";
     for (let i = 0; i < invoer.length; i++) {
-        let tekencode = invoer.charCodeAt(i);
-        let sleutelTekencode = sleutel.charCodeAt(i % sleutel.length);
+        let teken = invoer[i];
+        let soort = letterSoort(teken);
+        let sleutelTeken = sleutel[i % sleutel.length];
 
-        let verschuiving;
-        if (sleutelTekencode >= 65 && sleutelTekencode <= 90) // hoofdletter
-            verschuiving = sleutelTekencode - 65;
-        else if (sleutelTekencode >= 97 && sleutelTekencode <= 122) // kleine letter
-            verschuiving = sleutelTekencode - 97;
-        else
-            verschuiving = 0;
+        let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
 
-        if (tekencode >= 65 && tekencode <= 90) { // hoofdletter
-
-            yield { actie: "oplichting", rij: verschuiving, kolom: tekencode - 65 };
-
-            tekencode += verschuiving;
-            if (tekencode > 90) tekencode -= 26;
-        } else if (tekencode >= 97 && tekencode <= 122) { // kleine letter
-
-            yield { actie: "oplichting", rij: verschuiving, kolom: tekencode - 97 };
-
-            tekencode += verschuiving;
-            if (tekencode > 122) tekencode -= 26;
+        if (soort !== Letter.geen) {
+            yield { actie: "oplichting", rij: verschuiving, kolom: naarPlaatsInAlfabet(teken) };
+            teken = verschuifLetter(teken, verschuiving);
         }
 
-        let letter = String.fromCharCode(tekencode);
-        uitvoer += letter;
+        uitvoer += teken;
 
-        yield { actie: "letter", letter };
+        yield { actie: "letter", letter: teken };
     }
 
     return uitvoer;
@@ -42,35 +29,20 @@ export function* vigereneVersleutel(invoer: string, sleutel: string): Uitvoertyp
 export function* vigereneOntsleutel(invoer: string, sleutel: string): Uitvoertype {
     let uitvoer = "";
     for (let i = 0; i < invoer.length; i++) {
-        let tekencode = invoer.charCodeAt(i);
-        let sleutelTekencode = sleutel.charCodeAt(i % sleutel.length);
+        let teken = invoer[i];
+        let soort = letterSoort(teken);
+        let sleutelTeken = sleutel[i % sleutel.length];
 
-        let verschuiving;
-        if (sleutelTekencode >= 65 && sleutelTekencode <= 90) // hoofdletter
-            verschuiving = sleutelTekencode - 65;
-        else if (sleutelTekencode >= 97 && sleutelTekencode <= 122) // kleine letter
-            verschuiving = sleutelTekencode - 97;
-        else
-            verschuiving = 0;
+        let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
 
-        if (tekencode >= 65 && tekencode <= 90) { // hoofdletter
-
-            yield { actie: "oplichting", rij: verschuiving, kolom: tekencode - 65 };
-
-            tekencode -= verschuiving;
-            if (tekencode < 65) tekencode += 26;
-        } else if (tekencode >= 97 && tekencode <= 122) { // kleine letter
-
-            yield { actie: "oplichting", rij: verschuiving, kolom: tekencode - 97 };
-
-            tekencode -= verschuiving;
-            if (tekencode < 97) tekencode += 26;
+        if (soort !== Letter.geen) {
+            yield { actie: "oplichting", rij: verschuiving, kolom: naarPlaatsInAlfabet(teken) };
+            teken = verschuifLetter(teken, -verschuiving);
         }
 
-        let letter = String.fromCharCode(tekencode);
-        uitvoer += letter;
+        uitvoer += teken;
 
-        yield { actie: "letter", letter };
+        yield { actie: "letter", letter: teken };
     }
 
     return uitvoer;

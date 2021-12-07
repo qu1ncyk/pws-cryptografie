@@ -1,51 +1,37 @@
-export type Uitvoertype = Generator<{ actie: "pijl", positie: number } | { actie: "letter", letter: string }, string>;
+import { Letter, letterSoort, naarPlaatsInAlfabet, verschuifLetter } from "../hulpfuncties";
+
+export type Uitvoertype = Generator<
+    { actie: "pijl", positie: number } | { actie: "letter", letter: string },
+    string>;
 
 export function* caesarVersleutel(invoer: string, verschuiving: number): Uitvoertype {
     let uitvoer = "";
-    for (let i = 0; i < invoer.length; i++) {
-        let tekencode = invoer.charCodeAt(i);
-        if (tekencode >= 65 && tekencode <= 90) { // hoofdletter
+    for (let teken of invoer) {
+        let soort = letterSoort(teken);
 
-            yield { actie: "pijl", positie: tekencode - 65 };
-
-            tekencode += verschuiving;
-            if (tekencode > 90) tekencode -= 26;
-        } else if (tekencode >= 97 && tekencode <= 122) { // kleine letter
-
-            yield { actie: "pijl", positie: tekencode - 97 };
-
-            tekencode += verschuiving;
-            if (tekencode > 122) tekencode -= 26;
+        if (soort !== Letter.geen) {
+            yield { actie: "pijl", positie: naarPlaatsInAlfabet(teken) };
+            teken = verschuifLetter(teken, verschuiving);
         }
 
-        let letter = String.fromCharCode(tekencode);
-        uitvoer += letter;
-
-        yield { actie: "letter", letter };
+        uitvoer += teken;
+        yield { actie: "letter", letter: teken };
     }
     return uitvoer;
 }
 
 export function* caesarOntsleutel(invoer: string, verschuiving: number): Uitvoertype {
     let uitvoer = "";
-    for (let i = 0; i < invoer.length; i++) {
-        let tekencode = invoer.charCodeAt(i);
-        if (tekencode >= 65 && tekencode <= 90) { // hoofdletter
-            tekencode -= verschuiving;
-            if (tekencode < 65) tekencode += 26;
+    for (let teken of invoer) {
+        let soort = letterSoort(teken);
 
-            yield { actie: "pijl", positie: tekencode - 65 };
-        } else if (tekencode >= 97 && tekencode <= 122) { // kleine letter
-            tekencode -= verschuiving;
-            if (tekencode < 97) tekencode += 26;
-
-            yield { actie: "pijl", positie: tekencode - 97 };
+        if (soort !== Letter.geen) {
+            teken = verschuifLetter(teken, -verschuiving);
+            yield { actie: "pijl", positie: naarPlaatsInAlfabet(teken) };
         }
 
-        let letter = String.fromCharCode(tekencode);
-        uitvoer += letter;
-
-        yield { actie: "letter", letter };
+        uitvoer += teken;
+        yield { actie: "letter", letter: teken };
     }
     return uitvoer;
 }
