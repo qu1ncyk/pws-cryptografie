@@ -5,7 +5,7 @@
         vigereneOntsleutel,
         Uitvoertype as Vigereneuitvoer,
     } from "../algoritmes/vigerene";
-    import { slaap } from "../hulpfuncties";
+    import { slaap, alfabet } from "../hulpfuncties";
 
     let tekst: string;
     let sleutel: string;
@@ -16,9 +16,6 @@
     let vergrendeld = false;
     let tekstInvoerElement: HTMLInputElement;
     let sleutelInvoerElement: HTMLInputElement;
-
-    let alfabet: string[] = [];
-    for (let i = 0; i < 26; i++) alfabet.push(String.fromCharCode(65 + i));
 
     function alfabetVanaf(vanafLetter: number, omgekeerd = false) {
         if (!omgekeerd) {
