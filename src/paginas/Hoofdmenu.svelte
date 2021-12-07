@@ -1,5 +1,5 @@
 <script lang="ts">
-    import PaginaLink from "./PaginaLink.svelte";
+    import PaginaLink from "../PaginaLink.svelte";
 </script>
 
 <svelte:head>

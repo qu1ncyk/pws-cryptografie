@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Pagina from "./Pagina.svelte";
-    import { caesarOntsleutel, caesarVersleutel } from "./algoritmes/caesar";
-    import type { Uitvoertype as Caesaruitvoer } from "./algoritmes/caesar";
-    import { slaap } from "./hulpfuncties";
+    import Pagina from "../Pagina.svelte";
+    import { caesarOntsleutel, caesarVersleutel } from "../algoritmes/caesar";
+    import type { Uitvoertype as Caesaruitvoer } from "../algoritmes/caesar";
+    import { slaap } from "../hulpfuncties";
     import Fa from "svelte-fa";
     import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Pagina from "./Pagina.svelte";
+    import Pagina from "../Pagina.svelte";
     import {
         vigereneVersleutel,
         vigereneOntsleutel,
         Uitvoertype as Vigereneuitvoer,
-    } from "./algoritmes/vigerene";
-    import { slaap } from "./hulpfuncties";
+    } from "../algoritmes/vigerene";
+    import { slaap } from "../hulpfuncties";
 
     let tekst: string;
     let sleutel: string;

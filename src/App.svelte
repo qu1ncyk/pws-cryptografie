@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Hoofdmenu from "./Hoofdmenu.svelte";
+	import Hoofdmenu from "./paginas/Hoofdmenu.svelte";
 	import { pad } from "./stores";
 
-	import Caesar from "./Caesar.svelte";
-	import Vigenere from "./Vigenere.svelte";
+	import Caesar from "./paginas/Caesar.svelte";
+	import Vigenere from "./paginas/Vigenere.svelte";
 
 	const paginas = {
 		"/caesar": Caesar,
