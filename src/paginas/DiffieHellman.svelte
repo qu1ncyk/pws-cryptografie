@@ -2,13 +2,10 @@
     import Pagina from "../Pagina.svelte";
     import { dhA, dhB } from "../algoritmes/diffie-hellman";
     import { slaap } from "../hulpfuncties";
-    import { fade } from "svelte/transition";
     import Vergelijking from "../Vergelijking.svelte";
-    import { element } from "svelte/internal";
-    import { pad } from "../stores";
 
-    let uitvoertekst = "";
     let vergrendeld = false;
+    let stap = 0;
 
     let g = 0;
     let p = 0;
@@ -48,26 +45,33 @@
         k = getallenB.k;
         for (let i in zichtbaar) zichtbaar[i] = false;
         await slaap(700);
-
+        
         zichtbaar.gA = zichtbaar.pA = zichtbaar.a = true;
+        stap = 1;
         await slaap(1200);
-
+        
         zichtbaar.AA = true;
+        stap = 2;
         await slaap(1200);
-
-        zichtbaar.gB = zichtbaar.pB = true;
+        
+        zichtbaar.gB = zichtbaar.pB = zichtbaar.AB = true;
+        stap = 3;
         await slaap(1200);
-
+        
         zichtbaar.b = true;
+        stap = 4;
         await slaap(1200);
-
+        
         zichtbaar.BB = true;
+        stap = 5;
         await slaap(1200);
-
-        zichtbaar.AB = zichtbaar.BA = true;
+        
+        zichtbaar.BA = true;
+        stap = 6;
         await slaap(1200);
-
+        
         zichtbaar.k = true;
+        stap = 7;
         vergrendeld = false;
     }
 </script>
@@ -171,7 +175,16 @@
             </div>
         </div>
     </div>
-    <p class="uitvoer">{uitvoertekst}</p>
+
+    <ol style="--stap: {stap};">
+        <li>Kies g, p en a</li>
+        <li>Bereken A</li>
+        <li>Verstuur g, p en A</li>
+        <li>Kies b</li>
+        <li>Bereken B</li>
+        <li>Verstuur B</li>
+        <li>Bereken K</li>
+    </ol>
 </Pagina>
 
 <style>
@@ -189,11 +202,28 @@
         place-content: space-around;
     }
 
-    .uitvoer {
-        border-top: gray 2px solid;
+    ol {
+        text-align: left;
+        margin: 0 auto;
         display: inline-block;
-        padding-top: 1em;
+        border-top: gray 2px solid;
         margin-top: 2em;
+        padding-top: 1em;
+        position: relative;
+    }
+
+    li:first-child::after {
+        content: "";
+        width: 100%;
+        height: calc((100% - 1em) / 7);
+        background-color: rgba(255, 255, 50, 0.5);
+        display: inline-block;
+        position: absolute;
+        top: -1px;
+        left: 0;
+        z-index: -1;
+        transition: transform 0.5s;
+        transform: translateY(calc(var(--stap) * 100%));
     }
 
     @media (min-width: 640px) {

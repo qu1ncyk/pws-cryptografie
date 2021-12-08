@@ -96,7 +96,7 @@
     }
 
     .container {
-        font-size: large;
+        font-size: medium;
         text-align: left;
     }
     @media (min-width: 640px) {
