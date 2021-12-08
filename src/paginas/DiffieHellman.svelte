@@ -2,6 +2,10 @@
     import Pagina from "../Pagina.svelte";
     import { dhA, dhB } from "../algoritmes/diffie-hellman";
     import { slaap } from "../hulpfuncties";
+    import { fade } from "svelte/transition";
+    import Vergelijking from "../Vergelijking.svelte";
+    import { element } from "svelte/internal";
+    import { pad } from "../stores";
 
     let uitvoertekst = "";
     let vergrendeld = false;
@@ -28,6 +32,8 @@
         k: false,
     };
 
+    let elementen: { [index: string]: HTMLElement } = {};
+
     async function go() {
         vergrendeld = true;
 
@@ -41,19 +47,25 @@
         B = getallenB.B;
         k = getallenB.k;
         for (let i in zichtbaar) zichtbaar[i] = false;
-        await slaap(300);
-
-        zichtbaar.gA = zichtbaar.pA = zichtbaar.gB = zichtbaar.pB = zichtbaar.a = true;
         await slaap(700);
 
-        zichtbaar.AA = zichtbaar.AB = true;
-        await slaap(700);
+        zichtbaar.gA = zichtbaar.pA = zichtbaar.a = true;
+        await slaap(1200);
+
+        zichtbaar.AA = true;
+        await slaap(1200);
+
+        zichtbaar.gB = zichtbaar.pB = true;
+        await slaap(1200);
 
         zichtbaar.b = true;
-        await slaap(700);
+        await slaap(1200);
 
-        zichtbaar.BA = zichtbaar.BB = true;
-        await slaap(700);
+        zichtbaar.BB = true;
+        await slaap(1200);
+
+        zichtbaar.AB = zichtbaar.BA = true;
+        await slaap(1200);
 
         zichtbaar.k = true;
         vergrendeld = false;
@@ -70,32 +82,92 @@
 
         <div class="visualisatie">
             <div>
-                <p>g = <span style="opacity: {zichtbaar.gA ? 1 : 0};">{g}</span></p>
-                <p>p = <span style="opacity: {zichtbaar.pA ? 1 : 0};">{p}</span></p>
-                <p>a = <span style="opacity: {zichtbaar.a ? 1 : 0};">{a}</span></p>
-                <p>
-                    A = g<sup>a</sup> mod p =
-                    <span style="opacity: {zichtbaar.AA ? 1 : 0};">{A}</span>
-                </p>
-                <p>B = <span style="opacity: {zichtbaar.BA ? 1 : 0};">{B}</span></p>
-                <p>
-                    K = B<sup>a</sup> mod p =
-                    <span style="opacity: {zichtbaar.k ? 1 : 0};">{k}</span>
-                </p>
+                <Vergelijking
+                    variabele="g"
+                    waarde={g}
+                    zichtbaar={zichtbaar.gA}
+                    bind:element={elementen.gA}
+                />
+                <Vergelijking
+                    variabele="p"
+                    waarde={p}
+                    zichtbaar={zichtbaar.pA}
+                    bind:element={elementen.pA}
+                />
+                <Vergelijking
+                    variabele="a"
+                    waarde={a}
+                    zichtbaar={zichtbaar.a}
+                />
+                <Vergelijking
+                    variabele="A"
+                    waarde={A}
+                    zichtbaar={zichtbaar.AA}
+                    bind:element={elementen.AA}
+                    machtMod={[
+                        [g, a, p],
+                        ["g", "a", "p"],
+                    ]}
+                />
+                <Vergelijking
+                    variabele="B"
+                    waarde={B}
+                    zichtbaar={zichtbaar.BA}
+                    variabeleBron={elementen.BB}
+                />
+                <Vergelijking
+                    variabele="K"
+                    waarde={k}
+                    zichtbaar={zichtbaar.k}
+                    machtMod={[
+                        [B, a, p],
+                        ["B", "a", "p"],
+                    ]}
+                />
             </div>
             <div>
-                <p>g = <span style="opacity: {zichtbaar.gB ? 1 : 0};">{g}</span></p>
-                <p>p = <span style="opacity: {zichtbaar.pB ? 1 : 0};">{p}</span></p>
-                <p>A = <span style="opacity: {zichtbaar.AB ? 1 : 0};">{A}</span></p>
-                <p>b = <span style="opacity: {zichtbaar.b ? 1 : 0};">{b}</span></p>
-                <p>
-                    B = g<sup>a</sup> mod p =
-                    <span style="opacity: {zichtbaar.BB ? 1 : 0};">{B}</span>
-                </p>
-                <p>
-                    K = A<sup>b</sup> mod p =
-                    <span style="opacity: {zichtbaar.k ? 1 : 0};">{k}</span>
-                </p>
+                <Vergelijking
+                    variabele="g"
+                    waarde={g}
+                    zichtbaar={zichtbaar.gB}
+                    variabeleBron={elementen.gA}
+                />
+                <Vergelijking
+                    variabele="p"
+                    waarde={p}
+                    zichtbaar={zichtbaar.pB}
+                    variabeleBron={elementen.pA}
+                />
+                <Vergelijking
+                    variabele="A"
+                    waarde={A}
+                    zichtbaar={zichtbaar.AB}
+                    variabeleBron={elementen.AA}
+                />
+                <Vergelijking
+                    variabele="b"
+                    waarde={b}
+                    zichtbaar={zichtbaar.b}
+                />
+                <Vergelijking
+                    variabele="B"
+                    waarde={B}
+                    zichtbaar={zichtbaar.BB}
+                    bind:element={elementen.BB}
+                    machtMod={[
+                        [g, b, p],
+                        ["g", "b", "p"],
+                    ]}
+                />
+                <Vergelijking
+                    variabele="K"
+                    waarde={k}
+                    zichtbaar={zichtbaar.k}
+                    machtMod={[
+                        [A, b, p],
+                        ["A", "b", "p"],
+                    ]}
+                />
             </div>
         </div>
     </div>
@@ -115,16 +187,6 @@
         min-width: 90vw;
         display: flex;
         place-content: space-around;
-    }
-
-    .visualisatie p {
-        margin: 0;
-        font-size: large;
-        text-align: left;
-    }
-
-    .visualisatie span {
-        transition: ease 0.5s opacity;
     }
 
     .uitvoer {

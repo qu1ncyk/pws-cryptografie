@@ -4,9 +4,9 @@ import { willekeurig, willekeurigPriem } from "../hulpfuncties";
 export function dhA() {
     // deze getallen werken bij een demonstratie, maar in het echt
     // moet je grotere getallen gebruiken voor de veiligheid
-    let g = willekeurig(1, 50);
-    let p = willekeurigPriem(1, 50);
-    let a = willekeurig(1, 50);
+    let g = willekeurig(10, 70);
+    let p = willekeurigPriem(10, 70);
+    let a = willekeurig(10, 70);
 
     let A = g ** a % p;
 
@@ -19,7 +19,7 @@ export function dhA() {
 }
 
 export function dhB({ g, p, A }: { g: number, p: number, A: number }) {
-    let b = willekeurig(1, 50);
+    let b = willekeurig(10, 70);
 
     let B = g ** b % p;
     let k = A ** b % p;
