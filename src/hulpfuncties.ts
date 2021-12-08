@@ -64,3 +64,31 @@ export function verschuifLetter(letter: string, aantal: number) {
     plaatsInAlfabet = mod(plaatsInAlfabet, 26);
     return vanPlaatsInAlfabet(plaatsInAlfabet, soort);
 }
+
+export function willekeurig(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+export function isPriem(getal: number) {
+    if (getal === 1) return false;
+    if (getal === 2) return true;
+    // getal is even
+    if (!(getal & 1)) return false;
+
+    // kijk of getal deelbaar is door i met 3 < i <= wortel(getal) en i is oneven
+    let wortel = Math.sqrt(getal);
+    for (let i = 3; i <= wortel; i += 2) {
+        if (getal % i === 0) return false;
+    }
+
+    return true;
+}
+
+export function willekeurigPriem(min: number, max: number) {
+    let getal: number;
+    do {
+        getal = willekeurig(min, max);
+    } while (!isPriem(getal));
+
+    return getal;
+}

@@ -1,7 +1,7 @@
 <script lang="ts">
     export let titel: string;
     export let link: string;
-    export let foto: string;
+    export let foto = "https://via.placeholder.com/100";
 
     import { pad } from "./stores";
 
@@ -12,7 +12,7 @@
 </script>
 
 <a href={link} on:click|preventDefault={volgLink}>
-    <img src={foto} alt={titel} />
+    <img src={foto} width="100" height="100" alt={titel} />
     <p>{titel}</p>
 </a>
 
@@ -21,11 +21,6 @@
         display: inline-block;
         padding: 10px;
         background-color: #ddd;
-    }
-
-    img {
-        width: 100px;
-        height: 100px;
     }
 
     p {
