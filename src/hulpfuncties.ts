@@ -92,3 +92,14 @@ export function willekeurigPriem(min: number, max: number) {
 
     return getal;
 }
+
+/** Grootste gemene deler */
+export function ggd(x: number, y: number) {
+    let min = Math.min(x, y);
+
+    for (let i = min; i > 0; i--) {
+        // is i een gemene deler van x en y?
+        if (x % i === 0 && y % i === 0)
+            return i;
+    }
+}
