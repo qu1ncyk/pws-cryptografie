@@ -2,6 +2,7 @@
     import { genereerSleutelpaar } from "../../algoritmes/rsa";
     import { slaap } from "../../hulpfuncties";
     import Vergelijking from "../../Vergelijking.svelte";
+    import { rsaSleutelPaar } from "../../stores";
 
     let vergrendeld = false;
 
@@ -33,6 +34,7 @@
         e = sleutelpaar.e;
         k = sleutelpaar.k;
         d = sleutelpaar.d;
+        $rsaSleutelPaar = {d, e, N};
         for (let i in zichtbaar) zichtbaar[i] = false;
         await slaap(700);
 

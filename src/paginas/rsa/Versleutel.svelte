@@ -3,6 +3,7 @@
     import { versleutelTekst, ontsleutelTekst } from "../../algoritmes/rsa";
     import { slaap } from "../../hulpfuncties";
     import Vergelijking from "../../Vergelijking.svelte";
+    import { rsaSleutelPaar } from "../../stores";
 
     let vergrendeld = false;
 
@@ -155,6 +156,17 @@
                 placeholder="(e/d, N)"
             />
         </label>
+        {#if $rsaSleutelPaar.d > 0}
+            <div class="sleutelpaar">
+                <p>Zojuist gegenereerd paar:</p>
+                <p>
+                    Publieke sleutel = ({$rsaSleutelPaar.e}, {$rsaSleutelPaar.N})
+                </p>
+                <p>
+                    Geheime sleutel = ({$rsaSleutelPaar.d}, {$rsaSleutelPaar.N})
+                </p>
+            </div>
+        {/if}
         <button on:click={codeer} disabled={vergrendeld}> Versleutel </button>
         <button on:click={decodeer} disabled={vergrendeld}> Ontsleutel </button>
     </form>
@@ -241,6 +253,16 @@
         place-items: center;
         place-content: center;
         gap: 2em;
+    }
+
+    .sleutelpaar {
+        background-color: #ddd;
+        padding: 0.3em;
+        margin-bottom: 0.3em;
+    }
+
+    .sleutelpaar p {
+        margin: 0;
     }
 
     .uitvoer {
