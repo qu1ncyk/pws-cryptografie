@@ -4,6 +4,9 @@
     import { slaap } from "../../hulpfuncties";
     import Vergelijking from "../../Vergelijking.svelte";
     import { rsaSleutelPaar } from "../../stores";
+    import Modal from "../../Modal.svelte";
+    import Fa from "svelte-fa";
+    import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
     let vergrendeld = false;
 
@@ -12,6 +15,7 @@
     let tekstInvoerElement: HTMLInputElement;
     let sleutelInvoerElement: HTMLInputElement;
     let versleutel = true;
+    let modal = false;
 
     let m = "";
     let n: number[] = [0];
@@ -180,7 +184,14 @@
                 />
             </div>
             <div>
-                <p>Invoer als getallen:</p>
+                <p>
+                    Invoer als getallen: <span
+                        class="info"
+                        on:click={() => (modal = true)}
+                    >
+                        <Fa icon={faInfoCircle} />
+                    </span>
+                </p>
                 <Vergelijking
                     variabele="n"
                     waarde={nVector}
@@ -230,7 +241,14 @@
                 />
             </div>
             <div>
-                <p>Getallen als tekst:</p>
+                <p>
+                    Getallen als tekst: <span
+                        class="info"
+                        on:click={() => (modal = true)}
+                    >
+                        <Fa icon={faInfoCircle} />
+                    </span>
+                </p>
                 <Vergelijking
                     variabele="m"
                     waarde={`"${m}"`}
@@ -244,6 +262,18 @@
     <p transition:fade|local class="uitvoer">{cVector}</p>
 {:else if !versleutel && zichtbaar.eind}
     <p transition:fade|local class="uitvoer">{m}</p>
+{/if}
+
+{#if modal}
+    <Modal titel="Opvulschema" on:sluit={() => (modal = false)}>
+        <p>
+            Het opvulschema dat is gebuikt bij deze implementatie zet de tekst
+            om in bytes, volgens UTF-8 encoding. Vervolgens worden die bytes
+            opgesplitst in nibbles. De letter A bijvoorbeeld is 65 in UTF-8. In
+            hexadecimaal is dat 0x41. Als twee losse nibbes zijn dat de getallen
+            4 en 1.
+        </p>
+    </Modal>
 {/if}
 
 <style>
@@ -282,6 +312,12 @@
 
     .visualisatie div {
         margin: 1em 0;
+    }
+
+    .info {
+        cursor: pointer;
+        color: #777;
+        font-size: large;
     }
 
     @media (min-width: 640px) {
