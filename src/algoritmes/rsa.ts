@@ -34,7 +34,7 @@ export function ontsleutelGetal(getal: number, d: number, N: number) {
     return Number(BigInt(getal) ** BigInt(d) % BigInt(N));
 }
 
-export function versleutelTekst(tekst: string, e: number, N: number) {
+export function* versleutelTekst(tekst: string, e: number, N: number) {
     let textEncoder = new TextEncoder();
     // zet tekst om in een rij bytes
     let bytes = textEncoder.encode(tekst);
@@ -48,13 +48,16 @@ export function versleutelTekst(tekst: string, e: number, N: number) {
         getallen.push(byte & 0xf);
     }
 
+    yield getallen;
+
     // versleutel elk getal
     return getallen.map(getal => versleutelGetal(getal, e, N));
 }
 
-export function ontsleutelTekst(versleuteldeGetallen: number[], d: number, N: number) {
+export function* ontsleutelTekst(versleuteldeGetallen: number[], d: number, N: number) {
     // ontsleutel elk getal
     let getallen = versleuteldeGetallen.map(getal => ontsleutelGetal(getal, d, N));
+    yield getallen;
 
     let bytes = new Uint8Array(getallen.length / 2);
     for (let i = 0; i < bytes.length; i++) {

@@ -3,7 +3,7 @@
     import { cubicOut } from "svelte/easing";
 
     export let variabele: string;
-    export let waarde: number | null = null;
+    export let waarde: number | string | null = null;
     export let zichtbaar: boolean;
     export let machtMod: [number[], string[]] | [] = [];
     export let product: [number[], string[]] | [] = [];
@@ -201,7 +201,7 @@
 
     .waarde-container {
         display: inline-block;
-        width: 2em;
+        min-width: 2em;
         margin: 0;
     }
 
