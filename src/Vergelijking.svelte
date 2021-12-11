@@ -3,9 +3,13 @@
     import { cubicOut } from "svelte/easing";
 
     export let variabele: string;
-    export let waarde: string | number;
+    export let waarde: number | null = null;
     export let zichtbaar: boolean;
     export let machtMod: [number[], string[]] | [] = [];
+    export let product: [number[], string[]] | [] = [];
+    export let productMin1: [number[], string[]] | [] = [];
+    export let dBreuk: number[] = [];
+    export let vector: [number[], string[]] | [] = [];
     export let element: HTMLElement | null = null;
     export let variabeleBron: HTMLElement | null = null;
 
@@ -22,7 +26,7 @@
             vanaf?: HTMLElement;
         }
     ) {
-        if (vanaf === null) return fade(node, { duration: 400, easing });
+        if (vanaf === null) return fade(node, { duration: 700, easing });
 
         let rect = node.getBoundingClientRect();
         let rectVanaf = vanaf.getBoundingClientRect();
@@ -45,8 +49,9 @@
 </script>
 
 <div class="container">
-    <span>{variabele} =</span>
+    <span class:omlaag50={dBreuk.length > 0}>{variabele}</span>
     {#if machtMod.length > 0}
+        =
         <div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};"
                 >{machtMod[0][0]}<sup>{machtMod[0][1]}</sup></span
@@ -62,20 +67,111 @@
                 >{machtMod[1][2]}</span
             >
         </div>
-        =
     {/if}
-    <div class="waarde-container">
-        {#if zichtbaar}
-            <span bind:this={element} in:kloon={{vanaf: variabeleBron}} out:fade>{waarde}</span>
-        {/if}
-    </div>
+    {#if product.length > 0}
+        =
+        <div class="rel">
+            <span style="opacity: {zichtbaar ? 1 : 0};">{product[0][0]}</span>
+            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                >{product[1][0]}</span
+            >
+        </div>
+        ·
+        <div class="rel">
+            <span style="opacity: {zichtbaar ? 1 : 0};">{product[0][1]}</span>
+            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                >{product[1][1]}</span
+            >
+        </div>
+    {/if}
+    {#if productMin1.length > 0}
+        = (<div class="rel">
+            <span style="opacity: {zichtbaar ? 1 : 0};"
+                >{productMin1[0][0]}</span
+            >
+            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                >{productMin1[1][0]}</span
+            >
+        </div>
+        - 1)(<div class="rel">
+            <span style="opacity: {zichtbaar ? 1 : 0};"
+                >{productMin1[0][1]}</span
+            >
+            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                >{productMin1[1][1]}</span
+            >
+        </div>
+        - 1)
+    {/if}
+    {#if dBreuk.length > 0}
+        <span class="omlaag50">=</span>
+        <div class="breuk">
+            <div>
+                <div class="rel">
+                    <span style="opacity: {zichtbaar ? 1 : 0};"
+                        >{dBreuk[0]}</span
+                    >
+                    <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                        >k</span
+                    >
+                </div>
+                ·
+                <div class="rel">
+                    <span style="opacity: {zichtbaar ? 1 : 0};"
+                        >{dBreuk[1]}</span
+                    >
+                    <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                        >φ</span
+                    >
+                </div>
+                + 1
+            </div>
+            <div class="rel">
+                <span style="opacity: {zichtbaar ? 1 : 0};">{dBreuk[2]}</span>
+                <span class="abs e" style="opacity: {zichtbaar ? 0 : 1};"
+                    >e</span
+                >
+            </div>
+        </div>
+    {/if}
+    {#if vector.length > 0}
+        = (<div class="rel">
+            <span style="opacity: {zichtbaar ? 1 : 0};">{vector[0][0]}</span>
+            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                >{vector[1][0]}</span
+            >
+        </div>,
+        <div class="rel">
+            <span style="opacity: {zichtbaar ? 1 : 0};">{vector[0][1]}</span>
+            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                >{vector[1][1]}</span
+            >
+        </div>)
+    {/if}
+    {#if waarde !== null}
+        <span class:omlaag50={dBreuk.length > 0}>=</span>
+        <div class="waarde-container">
+            {#if zichtbaar}
+                <span
+                    class:omlaag50={dBreuk.length > 0}
+                    bind:this={element}
+                    in:kloon|local={{ vanaf: variabeleBron }}
+                    out:fade|local>{waarde}</span
+                >
+            {/if}
+        </div>
+    {/if}
 </div>
 
 <style>
     span,
     sup {
         display: inline-block;
-        transition: opacity 1s;
+        transition: opacity 0.7s;
+    }
+
+    .omlaag50 {
+        transform: translateY(50%);
     }
 
     .abs {
@@ -87,6 +183,20 @@
     .rel {
         position: relative;
         display: inline-block;
+    }
+
+    .breuk {
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .breuk > div:last-child {
+        text-align: center;
+        border-top: 1px solid black;
+    }
+
+    .e {
+        width: 100%;
     }
 
     .waarde-container {

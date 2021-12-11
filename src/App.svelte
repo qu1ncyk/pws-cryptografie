@@ -5,11 +5,13 @@
 	import Caesar from "./paginas/Caesar.svelte";
 	import Vigenere from "./paginas/Vigenere.svelte";
 	import DiffieHellman from "./paginas/DiffieHellman.svelte";
+	import RSA from "./paginas/RSA.svelte";
 
 	const paginas = {
 		"/caesar": Caesar,
 		"/vigenere": Vigenere,
 		"/diffie-hellman": DiffieHellman,
+		"/rsa": RSA,
 	};
 </script>
 

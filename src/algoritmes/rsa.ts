@@ -1,8 +1,8 @@
 import { willekeurig, willekeurigPriem, ggd } from "../hulpfuncties";
 
 export function genereerSleutelpaar() {
-    let p = willekeurigPriem(10, 50);
-    let q = willekeurigPriem(10, 50);
+    let p = willekeurigPriem(10, 70);
+    let q = willekeurigPriem(10, 70);
     let N = p * q;
     let phi = (p - 1) * (q - 1);
 
