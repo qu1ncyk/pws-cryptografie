@@ -1,5 +1,5 @@
 # PWS Cryptografie
-Deze GitHub-repo is onderdeel van mijn profielwerkstuk over
+Deze GitHub-repo is onderdeel van ons profielwerkstuk over
 cryptografie en bevat de code van
 [de implementaties](https://pws-cryptografie.pages.dev) van
 verschillende cryptografische algoritmes. De code is geschreven in
