@@ -48,6 +48,7 @@ export function* versleutelTekst(tekst: string, e: number, N: number) {
         getallen.push(byte & 0xf);
     }
 
+    // geef de getallen door aan de visualisatie
     yield getallen;
 
     // versleutel elk getal
@@ -57,6 +58,7 @@ export function* versleutelTekst(tekst: string, e: number, N: number) {
 export function* ontsleutelTekst(versleuteldeGetallen: number[], d: number, N: number) {
     // ontsleutel elk getal
     let getallen = versleuteldeGetallen.map(getal => ontsleutelGetal(getal, d, N));
+    // geef de getallen door aan de visualisatie
     yield getallen;
 
     let bytes = new Uint8Array(getallen.length / 2);
