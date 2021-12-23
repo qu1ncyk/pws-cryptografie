@@ -20,7 +20,9 @@
     a {
         display: inline-block;
         padding: 10px;
+        margin: 3px;
         background-color: #ddd;
+        border-radius: 7px;
     }
 
     p {
