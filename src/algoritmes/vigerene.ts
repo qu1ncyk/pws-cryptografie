@@ -2,7 +2,8 @@ import { Letter, letterSoort, naarPlaatsInAlfabet, verschuifLetter } from "../hu
 
 export type Uitvoertype = Generator<
     { actie: "oplichting", rij: number, kolom: number } | { actie: "letter", letter: string },
-    string>;
+    string
+>;
 
 export function* vigereneVersleutel(invoer: string, sleutel: string): Uitvoertype {
     let uitvoer = "";
@@ -14,12 +15,14 @@ export function* vigereneVersleutel(invoer: string, sleutel: string): Uitvoertyp
         let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
 
         if (soort !== Letter.geen) {
+            // beweeg de oplichting naar de juiste rij en kolom
             yield { actie: "oplichting", rij: verschuiving, kolom: naarPlaatsInAlfabet(teken) };
             teken = verschuifLetter(teken, verschuiving);
         }
 
         uitvoer += teken;
 
+        // voeg een letter toe in de visualisatie
         yield { actie: "letter", letter: teken };
     }
 
@@ -36,12 +39,14 @@ export function* vigereneOntsleutel(invoer: string, sleutel: string): Uitvoertyp
         let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
 
         if (soort !== Letter.geen) {
+            // beweeg de oplichting naar de juiste rij en kolom
             yield { actie: "oplichting", rij: verschuiving, kolom: naarPlaatsInAlfabet(teken) };
             teken = verschuifLetter(teken, -verschuiving);
         }
 
         uitvoer += teken;
 
+        // voeg een letter toe in de visualisatie
         yield { actie: "letter", letter: teken };
     }
 

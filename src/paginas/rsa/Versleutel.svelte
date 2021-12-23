@@ -46,9 +46,11 @@
             sleutelInvoerElement.focus();
             return;
         }
+
+        // zet string "(1, 2)" om in object { de: 1, N: 2 }
         let sleutelMatch = sleutel.match(/\(\s*(\d+)\s*,\s*(\d+)\s*\)/);
         if (sleutelMatch === null) {
-            alert("De sleutel is niet in het goede formaat: (e/d, N)");
+            alert("De sleutel is niet in het goede formaat: (e, N)");
             sleutelInvoerElement.focus();
             return;
         }
@@ -56,6 +58,7 @@
             de: Number(sleutelMatch[1]),
             N: Number(sleutelMatch[2]),
         };
+
         versleutel = true;
         vergrendeld = true;
 
@@ -95,6 +98,7 @@
             return;
         }
 
+        // zet string "(1, 2, 3, ...)" om in reeks getallen [1, 2, 3, ...]
         let invoerMatch = invoer.match(/\((:?\s*\d+\s*,)*\s*\d+\s*\)/)?.[0];
         if (invoerMatch === undefined) {
             alert("De invoer is niet in het goede formaat: (c1, c2, ...)");
@@ -103,9 +107,11 @@
         }
         let invoerArray = [...invoerMatch.matchAll(/\d+/g)];
         c = invoerArray.map(Number);
+
+        // zet string "(1, 2)" om in object { de: 1, N: 2 }
         let sleutelMatch = sleutel.match(/\(\s*(\d+)\s*,\s*(\d+)\s*\)/);
         if (sleutelMatch === null) {
-            alert("De sleutel is niet in het goede formaat: (e/d, N)");
+            alert("De sleutel is niet in het goede formaat: (d, N)");
             sleutelInvoerElement.focus();
             return;
         }
@@ -113,6 +119,7 @@
             de: Number(sleutelMatch[1]),
             N: Number(sleutelMatch[2]),
         };
+
         versleutel = false;
         vergrendeld = true;
 
@@ -171,8 +178,8 @@
                 </p>
             </div>
         {/if}
-        <button on:click={codeer} disabled={vergrendeld}> Versleutel </button>
-        <button on:click={decodeer} disabled={vergrendeld}> Ontsleutel </button>
+        <button on:click={codeer} disabled={vergrendeld}>Versleutel</button>
+        <button on:click={decodeer} disabled={vergrendeld}>Ontsleutel</button>
     </form>
     <div class="visualisatie">
         {#if versleutel}

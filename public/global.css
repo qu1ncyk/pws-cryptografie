@@ -50,6 +50,10 @@ button {
 	outline: none;
 }
 
+button:not(:disabled) {
+	cursor: pointer;
+}
+
 button:disabled {
 	color: #999;
 }

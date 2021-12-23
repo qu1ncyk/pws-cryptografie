@@ -66,6 +66,10 @@ export function verschuifLetter(letter: string, aantal: number) {
 }
 
 export function willekeurig(min: number, max: number) {
+    // het bereik van Math.random() is [0, 1>, met reële getallen
+    // het bereik van Math.random() * (max - min) is [0, max - min>
+    // het bereik van Math.random() * (max - min) + min is [min, max>
+    // het bereik van willekeurig(min, max) is [min, max - 1], met gehele getallen
     return Math.floor(Math.random() * (max - min) + min);
 }
 
@@ -75,7 +79,7 @@ export function isPriem(getal: number) {
     // getal is even
     if (!(getal & 1)) return false;
 
-    // kijk of getal deelbaar is door i met 3 < i <= wortel(getal) en i is oneven
+    // kijk of getal deelbaar is door i met 3 <= i <= wortel(getal) en i is oneven
     let wortel = Math.sqrt(getal);
     for (let i = 3; i <= wortel; i += 2) {
         if (getal % i === 0) return false;
