@@ -12,6 +12,7 @@
     export let vector: [number[], string[]] | [] = [];
     export let element: HTMLElement | null = null;
     export let variabeleBron: HTMLElement | null = null;
+    export let i = true;
 
     function kloon(
         node: HTMLElement,
@@ -49,21 +50,21 @@
 </script>
 
 <div class="container">
-    <span class:omlaag50={dBreuk.length > 0}>{variabele}</span>
+    <span class:omlaag50={dBreuk.length > 0} class:i>{variabele}</span>
     {#if machtMod.length > 0}
         =
         <div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};"
                 >{machtMod[0][0]}<sup>{machtMod[0][1]}</sup></span
             >
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{machtMod[1][0]}<sup>{machtMod[1][1]}</sup></span
             >
         </div>
         mod
         <div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};">{machtMod[0][2]}</span>
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{machtMod[1][2]}</span
             >
         </div>
@@ -72,14 +73,14 @@
         =
         <div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};">{product[0][0]}</span>
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{product[1][0]}</span
             >
         </div>
         ·
         <div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};">{product[0][1]}</span>
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{product[1][1]}</span
             >
         </div>
@@ -89,7 +90,7 @@
             <span style="opacity: {zichtbaar ? 1 : 0};"
                 >{productMin1[0][0]}</span
             >
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{productMin1[1][0]}</span
             >
         </div>
@@ -97,7 +98,7 @@
             <span style="opacity: {zichtbaar ? 1 : 0};"
                 >{productMin1[0][1]}</span
             >
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{productMin1[1][1]}</span
             >
         </div>
@@ -111,7 +112,7 @@
                     <span style="opacity: {zichtbaar ? 1 : 0};"
                         >{dBreuk[0]}</span
                     >
-                    <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                    <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                         >k</span
                     >
                 </div>
@@ -120,7 +121,7 @@
                     <span style="opacity: {zichtbaar ? 1 : 0};"
                         >{dBreuk[1]}</span
                     >
-                    <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+                    <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                         >φ</span
                     >
                 </div>
@@ -128,7 +129,7 @@
             </div>
             <div class="rel">
                 <span style="opacity: {zichtbaar ? 1 : 0};">{dBreuk[2]}</span>
-                <span class="abs e" style="opacity: {zichtbaar ? 0 : 1};"
+                <span class="abs e i" style="opacity: {zichtbaar ? 0 : 1};"
                     >e</span
                 >
             </div>
@@ -137,13 +138,13 @@
     {#if vector.length > 0}
         = (<div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};">{vector[0][0]}</span>
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{vector[1][0]}</span
             >
         </div>,
         <div class="rel">
             <span style="opacity: {zichtbaar ? 1 : 0};">{vector[0][1]}</span>
-            <span class="abs" style="opacity: {zichtbaar ? 0 : 1};"
+            <span class="abs i" style="opacity: {zichtbaar ? 0 : 1};"
                 >{vector[1][1]}</span
             >
         </div>)
@@ -183,6 +184,10 @@
     .rel {
         position: relative;
         display: inline-block;
+    }
+
+    .i {
+        font-style: italic;
     }
 
     .breuk {

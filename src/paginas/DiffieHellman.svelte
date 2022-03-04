@@ -177,13 +177,13 @@
     </div>
 
     <ol style="--stap: {stap};">
-        <li>Kies g, p en a</li>
-        <li>Bereken A</li>
-        <li>Verstuur g, p en A</li>
-        <li>Kies b</li>
-        <li>Bereken B</li>
-        <li>Verstuur B</li>
-        <li>Bereken K</li>
+        <li>Kies <i>g</i>, <i>p</i> en <i>a</i></li>
+        <li>Bereken <i>A</i></li>
+        <li>Verstuur <i>g</i>, <i>p</i> en <i>A</i></li>
+        <li>Kies <i>b</i></li>
+        <li>Bereken <i>B</i></li>
+        <li>Verstuur <i>B</i></li>
+        <li>Bereken <i>K</i></li>
     </ol>
 </Pagina>
 
