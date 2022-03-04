@@ -100,13 +100,10 @@
                     <span class="letter">{letter}</span>
                 {/each}
             </div>
-            <span class="pijl" style="--pijl-positie: {pijlPositie};">
+            <span class="pijl" style:--pijl-positie={pijlPositie}>
                 <Fa icon={pijlOmlaag ? faArrowDown : faArrowUp} />
             </span>
-            <div
-                class="alfabet versleuteld"
-                style="--alf-positie: {alfPositie};"
-            >
+            <div class="alfabet versleuteld" style:--alf-positie={alfPositie}>
                 {#each alfabet.concat(alfabet) as letter}
                     <span class="letter">{letter}</span>
                 {/each}

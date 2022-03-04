@@ -98,8 +98,8 @@
         </form>
 
         <table
-            style="--opgelichte-rij: {opgelichteRij};
-                --opgelichte-kolom: {opgelichteKolom};"
+            style:--opgelichte-rij={opgelichteRij}
+            style:--opgelichte-kolom={opgelichteKolom}
         >
             <tr>
                 <td rowspan="28">

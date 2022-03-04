@@ -176,7 +176,7 @@
         </div>
     </div>
 
-    <ol style="--stap: {stap};">
+    <ol style:--stap={stap}>
         <li>Kies <i>g</i>, <i>p</i> en <i>a</i></li>
         <li>Bereken <i>A</i></li>
         <li>Verstuur <i>g</i>, <i>p</i> en <i>A</i></li>
