@@ -10,11 +10,13 @@ export function* vigereneVersleutel(invoer: string, sleutel: string): Uitvoertyp
     for (let i = 0; i < invoer.length; i++) {
         let teken = invoer[i];
         let soort = letterSoort(teken);
+
         let sleutelTeken = sleutel[i % sleutel.length];
+        let sleutelSoort = letterSoort(sleutelTeken);
 
-        let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
-
-        if (soort !== Letter.geen) {
+        if (soort !== Letter.geen && sleutelSoort !== Letter.geen) {
+            let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
+            
             // beweeg de oplichting naar de juiste rij en kolom
             yield { actie: "oplichting", rij: verschuiving, kolom: naarPlaatsInAlfabet(teken) };
             teken = verschuifLetter(teken, verschuiving);
@@ -34,11 +36,13 @@ export function* vigereneOntsleutel(invoer: string, sleutel: string): Uitvoertyp
     for (let i = 0; i < invoer.length; i++) {
         let teken = invoer[i];
         let soort = letterSoort(teken);
+        
         let sleutelTeken = sleutel[i % sleutel.length];
+        let sleutelSoort = letterSoort(sleutelTeken);
 
-        let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
+        if (soort !== Letter.geen && sleutelSoort !== Letter.geen) {
+            let verschuiving = naarPlaatsInAlfabet(sleutelTeken);
 
-        if (soort !== Letter.geen) {
             // beweeg de oplichting naar de juiste rij en kolom
             yield { actie: "oplichting", rij: verschuiving, kolom: naarPlaatsInAlfabet(teken) };
             teken = verschuifLetter(teken, -verschuiving);
