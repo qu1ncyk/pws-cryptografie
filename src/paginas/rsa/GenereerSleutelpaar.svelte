@@ -99,6 +99,7 @@
             [e, N],
             ["e", "N"],
         ]}
+        i={false}
     />
     <Vergelijking
         variabele="Geheime sleutel"
@@ -107,6 +108,7 @@
             [d, N],
             ["d", "N"],
         ]}
+        i={false}
     />
 </div>
 

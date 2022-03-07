@@ -277,7 +277,7 @@
             Het opvulschema dat is gebuikt bij deze implementatie zet de tekst
             om in bytes, volgens UTF-8 encoding. Vervolgens worden die bytes
             opgesplitst in nibbles. De letter A bijvoorbeeld is 65 in UTF-8. In
-            hexadecimaal is dat 0x41. Als twee losse nibbes zijn dat de getallen
+            hexadecimaal is dat 0x41. Als twee losse nibbles zijn dat de getallen
             4 en 1.
         </p>
     </Modal>

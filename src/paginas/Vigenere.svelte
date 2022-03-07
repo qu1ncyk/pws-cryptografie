@@ -6,12 +6,14 @@
         Uitvoertype as Vigereneuitvoer,
     } from "../algoritmes/vigerene";
     import { slaap, alfabet } from "../hulpfuncties";
+    import { cubicOut } from "svelte/easing";
+    import { tweened } from "svelte/motion";
 
     let tekst: string;
     let sleutel: string;
     let uitvoertekst = "";
-    let opgelichteRij = -2;
-    let opgelichteKolom = -2;
+    let opgelichteRij = tweened(-2, { duration: 500, easing: cubicOut });
+    let opgelichteKolom = tweened(-2, { duration: 500, easing: cubicOut });
     let omgekeerdAlfabet = false;
     let vergrendeld = false;
     let tekstInvoerElement: HTMLInputElement;
@@ -54,8 +56,8 @@
             }
 
             if (uitvoer.value.actie === "oplichting") {
-                opgelichteRij = uitvoer.value.rij;
-                opgelichteKolom = uitvoer.value.kolom;
+                $opgelichteRij = uitvoer.value.rij;
+                $opgelichteKolom = uitvoer.value.kolom;
                 await slaap(600);
             }
             if (uitvoer.value.actie === "letter") {
@@ -98,8 +100,8 @@
         </form>
 
         <table
-            style="--opgelichte-rij: {opgelichteRij};
-                --opgelichte-kolom: {opgelichteKolom};"
+            style:--opgelichte-rij={$opgelichteRij}
+            style:--opgelichte-kolom={$opgelichteKolom}
         >
             <tr>
                 <td rowspan="28">
@@ -157,7 +159,6 @@
         position: absolute;
         display: inline-block;
         z-index: -1;
-        transition: ease 0.5s transform;
     }
     .rij-boven::after {
         width: 100%;

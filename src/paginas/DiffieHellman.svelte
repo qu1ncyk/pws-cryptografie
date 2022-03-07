@@ -3,9 +3,14 @@
     import { dhA, dhB } from "../algoritmes/diffie-hellman";
     import { slaap } from "../hulpfuncties";
     import Vergelijking from "../Vergelijking.svelte";
+    import { tweened } from "svelte/motion";
+    import { cubicOut } from "svelte/easing";
 
     let vergrendeld = false;
-    let stap = 0;
+    let stap = tweened(0, {
+        duration: 500,
+        easing: cubicOut,
+    });
 
     let g = 0;
     let p = 0;
@@ -45,33 +50,33 @@
         k = getallenB.k;
         for (let i in zichtbaar) zichtbaar[i] = false;
         await slaap(700);
-        
+
         zichtbaar.gA = zichtbaar.pA = zichtbaar.a = true;
-        stap = 1;
+        $stap = 1;
         await slaap(1200);
-        
+
         zichtbaar.AA = true;
-        stap = 2;
+        $stap = 2;
         await slaap(1200);
-        
+
         zichtbaar.gB = zichtbaar.pB = zichtbaar.AB = true;
-        stap = 3;
+        $stap = 3;
         await slaap(1200);
-        
+
         zichtbaar.b = true;
-        stap = 4;
+        $stap = 4;
         await slaap(1200);
-        
+
         zichtbaar.BB = true;
-        stap = 5;
+        $stap = 5;
         await slaap(1200);
-        
+
         zichtbaar.BA = true;
-        stap = 6;
+        $stap = 6;
         await slaap(1200);
-        
+
         zichtbaar.k = true;
-        stap = 7;
+        $stap = 7;
         vergrendeld = false;
     }
 </script>
@@ -176,14 +181,14 @@
         </div>
     </div>
 
-    <ol style="--stap: {stap};">
-        <li>Kies g, p en a</li>
-        <li>Bereken A</li>
-        <li>Verstuur g, p en A</li>
-        <li>Kies b</li>
-        <li>Bereken B</li>
-        <li>Verstuur B</li>
-        <li>Bereken K</li>
+    <ol style:--stap={$stap}>
+        <li>Kies <i>g</i>, <i>p</i> en <i>a</i></li>
+        <li>Bereken <i>A</i></li>
+        <li>Verstuur <i>g</i>, <i>p</i> en <i>A</i></li>
+        <li>Kies <i>b</i></li>
+        <li>Bereken <i>B</i></li>
+        <li>Verstuur <i>B</i></li>
+        <li>Bereken <i>K</i></li>
     </ol>
 </Pagina>
 
@@ -219,10 +224,9 @@
         background-color: rgba(255, 255, 50, 0.5);
         display: inline-block;
         position: absolute;
-        top: -1px;
+        top: -2px;
         left: 0;
         z-index: -1;
-        transition: transform 0.5s;
         transform: translateY(calc(var(--stap) * 100%));
     }
 
